@@ -66,14 +66,14 @@ Prettier is an opinionated code formatter. It enforces a consistent style by par
 
 <!-- prettier-ignore -->
 ```js
-foo(reallyLongArg(), omgSoManyParameters(), IShouldRefactorThis(), isThereSeriouslyAnotherOne());
+foo(reallyLongArg(5,10), omgSoManyParameters(), IShouldRefactorThis(), isThereSeriouslyAnotherOne());
 ```
 
 ### Output
 
 ```js
 foo(
-  reallyLongArg(),
+  reallyLongArg(50000),
   omgSoManyParameters(),
   IShouldRefactorThis(),
   isThereSeriouslyAnotherOne(),
