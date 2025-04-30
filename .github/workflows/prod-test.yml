@@ -75,9 +75,8 @@ jobs:
           - os: "ubuntu-latest"
             node: "16"
           # Tests on Intel Mac x Node.js 14 ( https://github.com/prettier/prettier/issues/16248 )
-          # We are disabling MacOS x Node.js 14 temporary ( https://github.com/prettier/prettier/issues/16964 )
-          # - os: "macos-13"
-          #   node: "14"
+          - os: "macos-13"
+            node: "14"
         # setup-node does not support Node.js 14 x M1 Mac
         exclude:
           - os: "macos-latest"
@@ -152,7 +151,7 @@ jobs:
         run: node -v | grep "v0.10.48" || exit 1
 
       - name: Run CLI on Node.js v0.10.48
-        run: node dist/bin/prettier.cjs --version 2>&1 >/dev/null | grep "prettier requires at least version 14 of Node, please upgrade" || exit 1
+        run: node dist/prettier/bin/prettier.cjs --version 2>&1 >/dev/null | grep "prettier requires at least version 14 of Node, please upgrade" || exit 1
 
   preview:
     if: github.event_name == 'pull_request' && github.repository == 'prettier/prettier'
@@ -178,4 +177,4 @@ jobs:
       - name: Release
         run: |
           npx pkg-pr-new publish --compact
-        working-directory: dist
+        working-directory: dist/prettier

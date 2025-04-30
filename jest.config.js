@@ -13,7 +13,7 @@ const SKIP_PRODUCTION_INSTALL = Boolean(process.env.SKIP_PRODUCTION_INSTALL);
 const SKIP_TESTS_WITH_NEW_SYNTAX = process.versions.node.startsWith("14.");
 
 let PRETTIER_DIR = isProduction
-  ? path.join(PROJECT_ROOT, "dist")
+  ? path.join(PROJECT_ROOT, "dist/prettier")
   : PROJECT_ROOT;
 let PRETTIER_INSTALLED_DIR = "";
 if (
@@ -40,9 +40,15 @@ if (isProduction) {
   );
 }
 
-if (SKIP_TESTS_WITH_NEW_SYNTAX) {
+if (SKIP_TESTS_WITH_NEW_SYNTAX || process.versions.node.startsWith("16.")) {
+  // Uses import attributes
   testPathIgnorePatterns.push(
     "<rootDir>/tests/integration/__tests__/help-options.js",
+  );
+}
+
+if (SKIP_TESTS_WITH_NEW_SYNTAX) {
+  testPathIgnorePatterns.push(
     "<rootDir>/tests/integration/__tests__/plugin-parsers.js",
     "<rootDir>/tests/integration/__tests__/normalize-doc.js",
     "<rootDir>/tests/integration/__tests__/doc-utils-clean-doc.js",
@@ -57,7 +63,7 @@ const config = {
     "<rootDir>/tests/config/format-test-setup.js",
     "<rootDir>/tests/integration/integration-test-setup.js",
   ],
-  runner: "jest-light-runner",
+  runner: "jest-light-runner/child-process",
   snapshotSerializers: [
     "jest-snapshot-serializer-raw",
     "jest-snapshot-serializer-ansi",

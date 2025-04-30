@@ -1,5 +1,5 @@
 import path from "node:path";
-import { DIST_DIR, PROJECT_ROOT, readJson, writeJson } from "../utils/index.js";
+import { PROJECT_ROOT, readJson, writeJson } from "../utils/index.js";
 
 const keysToKeep = [
   "name",
@@ -20,7 +20,8 @@ const keysToKeep = [
   "preferUnplugged",
 ];
 
-async function buildPackageJson({ file, files }) {
+async function buildPackageJson({ packageConfig, file }) {
+  const { distDirectory, files } = packageConfig;
   const packageJson = await readJson(path.join(PROJECT_ROOT, file.input));
 
   const bin = files.find(
@@ -99,10 +100,19 @@ async function buildPackageJson({ file, files }) {
       prepublishOnly:
         "node -e \"assert.equal(require('.').version, require('..').version)\"",
     },
+    peerDependencies: {
+      // Add `^` here, so we don't need release Prettier user can still update CLI
+      "@prettier/cli": `^${packageJson.dependencies["@prettier/cli"]}`,
+    },
+    peerDependenciesMeta: {
+      "@prettier/cli": {
+        optional: true,
+      },
+    },
   };
 
   await writeJson(
-    path.join(DIST_DIR, file.output.file),
+    path.join(distDirectory, file.output.file),
     Object.assign(pick(packageJson, keysToKeep), overrides),
   );
 }

@@ -62,6 +62,9 @@ exports[`API getSupportInfo() 1`] = `
     "MDX": [
       "mdx",
     ],
+    "MJML": [
+      "mjml",
+    ],
     "Markdown": [
       "markdown",
     ],
@@ -101,6 +104,10 @@ exports[`API getSupportInfo() 1`] = `
     },
     "bracketSpacing": {
       "default": true,
+      "type": "boolean",
+    },
+    "checkIgnorePragma": {
+      "default": false,
       "type": "boolean",
     },
     "cursorOffset": {
@@ -197,6 +204,7 @@ exports[`API getSupportInfo() 1`] = `
         "html",
         "angular",
         "lwc",
+        "mjml",
       ],
       "default": undefined,
       "type": "choice",
@@ -296,10 +304,10 @@ exports[`API getSupportInfo() 1`] = `
 }
 `;
 
-exports[`CLI --support-info (stderr) 1`] = `""`;
-
-exports[`CLI --support-info (stdout) 1`] = `
-"{
+exports[`CLI --support-info  1`] = `
+{
+  "stderr": "",
+  "stdout": "{
   "languages": [
     {
       "aceMode": "html",
@@ -320,7 +328,7 @@ exports[`CLI --support-info (stdout) 1`] = `
       "aceMode": "css",
       "codemirrorMimeType": "text/css",
       "codemirrorMode": "css",
-      "color": "#563d7c",
+      "color": "#663399",
       "extensions": [".css", ".wxss"],
       "linguistLanguageId": 50,
       "name": "CSS",
@@ -392,8 +400,7 @@ exports[`CLI --support-info (stdout) 1`] = `
         ".html.hl",
         ".inc",
         ".xht",
-        ".xhtml",
-        ".mjml"
+        ".xhtml"
       ],
       "linguistLanguageId": 146,
       "name": "HTML",
@@ -468,7 +475,7 @@ exports[`CLI --support-info (stdout) 1`] = `
     },
     {
       "aceMode": "json",
-      "aliases": ["geojson", "jsonl", "topojson"],
+      "aliases": ["geojson", "jsonl", "sarif", "topojson"],
       "codemirrorMimeType": "application/json",
       "codemirrorMode": "javascript",
       "color": "#292929",
@@ -482,7 +489,10 @@ exports[`CLI --support-info (stdout) 1`] = `
         ".har",
         ".ice",
         ".JSON-tmLanguage",
+        ".json.example",
         ".mcmeta",
+        ".sarif",
+        ".tact",
         ".tfstate",
         ".tfstate.backup",
         ".topojson",
@@ -502,8 +512,10 @@ exports[`CLI --support-info (stdout) 1`] = `
         ".tern-config",
         ".tern-project",
         ".watchmanconfig",
+        "MODULE.bazel.lock",
         "Pipfile.lock",
         "composer.lock",
+        "deno.lock",
         "flake.lock",
         "mcmod.info",
         ".babelrc",
@@ -530,6 +542,7 @@ exports[`CLI --support-info (stdout) 1`] = `
         ".code-snippets",
         ".code-workspace",
         ".sublime-build",
+        ".sublime-color-scheme",
         ".sublime-commands",
         ".sublime-completions",
         ".sublime-keymap",
@@ -548,13 +561,13 @@ exports[`CLI --support-info (stdout) 1`] = `
       "linguistLanguageId": 423,
       "name": "JSON with Comments",
       "parsers": ["jsonc"],
-      "tmScope": "source.js",
+      "tmScope": "source.json.comments",
       "type": "data",
       "vscodeLanguageIds": ["jsonc"]
     },
     {
       "aceMode": "json",
-      "aliases": ["geojson", "jsonl", "topojson"],
+      "aliases": ["geojson", "jsonl", "sarif", "topojson"],
       "codemirrorMimeType": "application/json",
       "codemirrorMode": "javascript",
       "color": "#292929",
@@ -675,6 +688,21 @@ exports[`CLI --support-info (stdout) 1`] = `
       "wrap": true
     },
     {
+      "aceMode": "html",
+      "aliases": ["MJML", "mjml"],
+      "codemirrorMimeType": "text/html",
+      "codemirrorMode": "htmlmixed",
+      "color": "#e34c26",
+      "extensions": [".mjml"],
+      "filenames": [],
+      "linguistLanguageId": 146,
+      "name": "MJML",
+      "parsers": ["mjml"],
+      "tmScope": "text.mjml.basic",
+      "type": "markup",
+      "vscodeLanguageIds": ["mjml"]
+    },
+    {
       "aceMode": "text",
       "color": "#dc3a0c",
       "extensions": [".pcss", ".postcss"],
@@ -720,7 +748,7 @@ exports[`CLI --support-info (stdout) 1`] = `
       "codemirrorMode": "javascript",
       "color": "#3178c6",
       "extensions": [".ts", ".cts", ".mts"],
-      "interpreters": ["deno", "ts-node"],
+      "interpreters": ["deno", "ts-node", "tsx"],
       "linguistLanguageId": 378,
       "name": "TypeScript",
       "parsers": ["typescript", "babel-ts"],
@@ -735,7 +763,7 @@ exports[`CLI --support-info (stdout) 1`] = `
       "linguistLanguageId": 391,
       "name": "Vue",
       "parsers": ["vue"],
-      "tmScope": "text.html.vue",
+      "tmScope": "source.vue",
       "type": "markup",
       "vscodeLanguageIds": ["vue"]
     },
@@ -760,9 +788,11 @@ exports[`CLI --support-info (stdout) 1`] = `
       "filenames": [
         ".clang-format",
         ".clang-tidy",
+        ".clangd",
         ".gemrc",
         "CITATION.cff",
         "glide.lock",
+        "pixi.lock",
         ".prettierrc",
         ".stylelintrc",
         ".lintstagedrc"
@@ -814,6 +844,14 @@ exports[`CLI --support-info (stdout) 1`] = `
       "description": "Print spaces between brackets.",
       "name": "bracketSpacing",
       "oppositeDescription": "Do not print spaces between brackets.",
+      "pluginDefaults": {},
+      "type": "boolean"
+    },
+    {
+      "category": "Special",
+      "default": false,
+      "description": "Check whether the file's first docblock comment contains '@noprettier' or '@noformat' to determine if it should be formatted.",
+      "name": "checkIgnorePragma",
       "pluginDefaults": {},
       "type": "boolean"
     },
@@ -986,7 +1024,8 @@ exports[`CLI --support-info (stdout) 1`] = `
         { "description": "Ember / Handlebars", "value": "glimmer" },
         { "description": "HTML", "value": "html" },
         { "description": "Angular", "value": "angular" },
-        { "description": "Lightning Web Components", "value": "lwc" }
+        { "description": "Lightning Web Components", "value": "lwc" },
+        { "description": "MJML", "value": "mjml" }
       ],
       "description": "Which parser to use.",
       "name": "parser",
@@ -1070,7 +1109,7 @@ exports[`CLI --support-info (stdout) 1`] = `
     {
       "category": "Special",
       "default": false,
-      "description": "Require either '@prettier' or '@format' to be present in the file's first docblock comment\\nin order for it to be formatted.",
+      "description": "Require either '@prettier' or '@format' to be present in the file's first docblock comment in order for it to be formatted.",
       "name": "requirePragma",
       "pluginDefaults": {},
       "type": "boolean"
@@ -1145,8 +1184,7 @@ exports[`CLI --support-info (stdout) 1`] = `
       "type": "boolean"
     }
   ]
+}",
+  "write": [],
 }
-"
 `;
-
-exports[`CLI --support-info (write) 1`] = `[]`;
